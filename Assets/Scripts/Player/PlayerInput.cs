@@ -60,6 +60,7 @@ public class PlayerInput : MonoBehaviour
     }
     #endregion
 
+    #region Jump
     void PlayerJump()
     {
         if (Input.GetKey(KeyCode.Space) && jumpTimer != 0f)
@@ -79,6 +80,7 @@ public class PlayerInput : MonoBehaviour
             jumpTimer = 0f;
         }
     }
+    #endregion
 
     #region Collisions
     void OnCollisionEnter(Collision other)
