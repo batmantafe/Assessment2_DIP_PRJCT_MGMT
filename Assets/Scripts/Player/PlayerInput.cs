@@ -13,7 +13,6 @@ public class PlayerInput : MonoBehaviour
     public float jumpTimer;
     public float jumpTimerMax;
 
-    // Use this for initialization
     void Start()
     {
         playerRigi = GetComponent<Rigidbody>();
@@ -24,11 +23,16 @@ public class PlayerInput : MonoBehaviour
         jumpTimer = jumpTimerMax;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         PlayerMovement();
         PlayerJump();
+    }
+
+    void Update()
+    {
+        PlayerAttack();
+        PlayerBlock();
     }
 
     #region Movement
@@ -78,6 +82,24 @@ public class PlayerInput : MonoBehaviour
         if (jumpTimer <= 0f)
         {
             jumpTimer = 0f;
+        }
+    }
+    #endregion
+
+    #region Attack/Block
+    void PlayerAttack()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Debug.Log("Player ATTACKS!");
+        }
+    }
+
+    void PlayerBlock()
+    {
+        if(Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            Debug.Log("Player BLOCKS!");
         }
     }
     #endregion
