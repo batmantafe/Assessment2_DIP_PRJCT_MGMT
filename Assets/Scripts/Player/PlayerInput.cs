@@ -13,6 +13,10 @@ public class PlayerInput : MonoBehaviour
     public float jumpTimer;
     public float jumpTimerMax;
 
+    // Delegates
+    public delegate void BlockDelegate();
+    public BlockDelegate blockCallback;
+
     void Start()
     {
         playerRigi = GetComponent<Rigidbody>();
@@ -21,6 +25,9 @@ public class PlayerInput : MonoBehaviour
         jumpThrust = 50f;
         jumpTimerMax = .2f;
         jumpTimer = jumpTimerMax;
+
+        // PlayerBlock Function subscribes to blockCallback Delegate
+        blockCallback += PlayerBlock;
     }
 
     void FixedUpdate()
