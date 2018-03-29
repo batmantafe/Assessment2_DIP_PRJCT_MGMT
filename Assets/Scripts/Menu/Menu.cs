@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    public GameObject inGameOptionsMenu;
+
     private string currentScene;
 
     // Use this for initialization
@@ -17,6 +19,8 @@ public class Menu : MonoBehaviour
     void Update()
     {
         Splash();
+
+        EscapeKeyInGame();
     }
 
     #region Splash Screen
@@ -53,6 +57,49 @@ public class Menu : MonoBehaviour
     public void ShrimpButton()
     {
         SceneManager.LoadScene("Game");
+    }
+    #endregion
+
+    #region ESC / In-Game Options Menu
+    void EscapeKeyInGame()
+    {
+        if (currentScene == "Game")
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (inGameOptionsMenu.activeSelf == false)
+                {
+                    Time.timeScale = 0f;
+
+                    inGameOptionsMenu.SetActive(true);
+                }
+                else
+                {
+                    Time.timeScale = 1f;
+
+                    inGameOptionsMenu.SetActive(false);
+                }
+            }
+        }
+    }
+
+    public void EscapeButton()
+    {
+        Time.timeScale = 0f;
+
+        inGameOptionsMenu.SetActive(true);
+    }
+
+    public void ContinueButton()
+    {
+        Time.timeScale = 1f;
+
+        inGameOptionsMenu.SetActive(false);
+    }
+
+    public void MainMenuButton()
+    {
+        SceneManager.LoadScene("Main Menu");
     }
     #endregion
 }
