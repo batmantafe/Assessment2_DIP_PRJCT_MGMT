@@ -8,6 +8,7 @@ public class Menu : MonoBehaviour
     public GameObject inGameOptionsMenu;
 
     private string currentScene;
+    private int characterChoice;
 
     // Use this for initialization
     void Start()
@@ -51,11 +52,15 @@ public class Menu : MonoBehaviour
     #region Character
     public void DiverButton()
     {
+        PlayerPrefs.SetInt("CharacterChoice", 1);
+
         SceneManager.LoadScene("Game");
     }
 
     public void ShrimpButton()
     {
+        PlayerPrefs.SetInt("CharacterChoice", 2);
+
         SceneManager.LoadScene("Game");
     }
     #endregion
