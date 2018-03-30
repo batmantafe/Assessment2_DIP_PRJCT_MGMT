@@ -7,15 +7,29 @@ using UnityEngine.AI;
 [RequireComponent(typeof(SphereCollider))]
 public class Enemy : MonoBehaviour
 {
-    private NavMeshAgent agent;
-    private SphereCollider sensesRange;
+	// YOU WERE MEANT TO BE THE CHOSEN ONE!
+
+	enum Tasks
+	{
+		Attacking,
+		Tracking,
+		Waiting,
+		Walking,
+		Lurking
+	}
+
+	private NavMeshAgent agent;
+	private SphereCollider sensesRange;
 	private GameObject player;
-	private Vector3 playerLastSpotted;
+	private Vector3 nextDestination;
 	private Vector3 currentDestination;
 	private bool playerSpotted;
 	private float currentWaitTime;
+	private Tasks currentTask;
 
-	public Transform mapCentre;
+	public Vector3 mapCentre;
+	public float sensesIncrease = 1f;
+	public float maxSensesRange = 30f;
 	public float fieldOfView = 110f;
 	public float waitTime = 3f;
 	public float walkSpeed = 2.5f;
@@ -23,33 +37,96 @@ public class Enemy : MonoBehaviour
 	public float attackRange = 1f;
 
 	void Awake()
-    {
-        agent = GetComponent<NavMeshAgent>();
-        sensesRange = GetComponent<SphereCollider>();
+	{
+		agent = GetComponent<NavMeshAgent>();
+		sensesRange = GetComponent<SphereCollider>();
 		player = GameObject.FindGameObjectWithTag("Player");
-		playerLastSpotted = mapCentre.position;
+		nextDestination = mapCentre;
+		agent.destination = mapCentre;
 		agent.stoppingDistance = attackRange * 0.8f;
-    }
+	}
 
-    void Update()
-    {
-		if (agent.remainingDistance <= attackRange && playerSpotted)
+	void Update()
+	{
+		DecideTask();
+		EnactTask();
+	}
+
+	void DecideTask()
+	{
+		if (playerSpotted && agent.remainingDistance <= attackRange && currentDestination != mapCentre)
 		{
-			agent.Stop();
-			// Run attack script
+			currentTask = Tasks.Attacking;
+		}
+		else if (nextDestination != mapCentre || playerSpotted)
+		{
+			currentTask = Tasks.Tracking;
+			if (nextDestination == currentDestination && agent.stoppingDistance > agent.remainingDistance)
+			{
+				currentTask = Tasks.Waiting;
+			}
+		}
+		else if (agent.stoppingDistance > agent.remainingDistance)
+		{
+			currentTask = Tasks.Lurking;
 		}
 		else
 		{
-			Movement();
+			currentTask = Tasks.Walking;
 		}
-    }
+	}
+
+	void EnactTask()
+	{
+		switch (currentTask)
+		{
+			case Tasks.Attacking:
+				agent.Stop();
+				// Attack
+				break;
+			case Tasks.Tracking:
+				if (agent.speed != runSpeed)
+				{
+					agent.speed = runSpeed;
+				}
+				agent.destination = nextDestination;
+				break;
+			case Tasks.Waiting:
+				currentWaitTime += Time.deltaTime;
+				if (currentWaitTime >= waitTime)
+				{
+					agent.destination = mapCentre;
+					nextDestination = mapCentre;
+				}
+				break;
+			case Tasks.Walking:
+				if (agent.speed != walkSpeed)
+				{
+					agent.speed = walkSpeed;
+				}
+				if (currentDestination != mapCentre)
+				{
+					agent.destination = mapCentre;
+					nextDestination = mapCentre;
+				}
+				break;
+			case Tasks.Lurking:
+				agent.Stop();
+				if (sensesRange.radius < maxSensesRange)
+				{
+					sensesRange.radius += sensesIncrease * Time.deltaTime;
+				}
+				break;
+		}
+		currentDestination = nextDestination;
+	}
 
 	void OnTriggerStay(Collider other)
 	{
 		if (other.gameObject == player)
 		{
 			playerSpotted = false;
-			Vector3 target = other.transform.position;
+			Vector3 target = player.transform.position;
 
 			if (!Sight(target))
 				Hearing(target);
@@ -60,14 +137,6 @@ public class Enemy : MonoBehaviour
 	{
 		if (other.gameObject == player)
 			playerSpotted = false;
-	}
-
-	void Movement()
-	{
-		if (playerSpotted || agent.remainingDistance > attackRange * 0.8f)
-		{
-
-		}
 	}
 
 	bool Sight(Vector3 target)
@@ -84,7 +153,7 @@ public class Enemy : MonoBehaviour
 				if (spotted.collider.gameObject == player)
 				{
 					playerSpotted = true;
-					playerLastSpotted = target;
+					nextDestination = target;
 					return true;
 				}
 			}
@@ -93,7 +162,7 @@ public class Enemy : MonoBehaviour
 	}
 
 	void Hearing(Vector3 target)
-    {
+	{
 		NavMeshPath path = new NavMeshPath();
 
 		if (agent.enabled)
@@ -118,7 +187,7 @@ public class Enemy : MonoBehaviour
 
 		if (pathLength <= sensesRange.radius)
 		{
-			playerLastSpotted = target;
+			nextDestination = target;
 		}
-    }
+	}
 }
