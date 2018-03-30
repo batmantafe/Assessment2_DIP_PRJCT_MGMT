@@ -19,13 +19,15 @@ public class PlayerHUD : MonoBehaviour
         playerHealthMax = 100;
         playerHealth = playerHealthMax;
 
-        playerBlockMax = 100;
+        playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
     }
 
     void Update()
     {
         TestBars();
+
+        BlockCooldown();
     }
 
     void OnGUI()
@@ -40,30 +42,44 @@ public class PlayerHUD : MonoBehaviour
         GUI.Box(new Rect(6f * scrW, 8.15f * scrH, playerBlockCurrent * (4 * scrW) / playerBlockMax, 0.25f * scrH), "", blockBarStyle);
     }
 
-    #region Testing Shortcuts
+    #region Debugging Shortcuts
     void TestBars()
     {
-        if(Input.GetKeyDown(KeyCode.Return))
+        if (Input.GetKeyDown(KeyCode.Return))
         {
             playerHealth = playerHealth - 10;
             Debug.Log("Testing playerHealth in PlayerGUI script.");
 
-            if(playerHealth <= 0)
+            if (playerHealth <= 0)
             {
                 playerHealth = 0;
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            playerBlockCurrent = playerBlockCurrent - 10;
-            Debug.Log("Testing playerHealth in PlayerGUI script.");
-
-            if (playerBlockCurrent <= 0)
-            {
-                playerBlockCurrent = 0;
-            }
-        }
     }
     #endregion
+
+    void BlockCooldown()
+    {
+        if (playerBlockCurrent <= 0)
+        {
+            playerBlockCurrent = 0;
+        }
+
+        if (playerBlockCurrent >= playerBlockMax)
+        {
+            playerBlockCurrent = playerBlockMax;
+        }
+
+        if (PlayerInput.isBlocking == true &&
+            playerBlockCurrent > 0f)
+        {
+            playerBlockCurrent = playerBlockCurrent - (1f * Time.deltaTime);
+        }
+
+        if (PlayerInput.isBlocking == false &&
+            playerBlockCurrent != playerBlockMax)
+        {
+            playerBlockCurrent = playerBlockCurrent + (0.25f * Time.deltaTime);
+        }
+    }
 }

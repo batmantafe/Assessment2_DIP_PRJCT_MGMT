@@ -13,9 +13,8 @@ public class PlayerInput : MonoBehaviour
     public float jumpTimer;
     public float jumpTimerMax;
 
-    // Delegates
-    public delegate void BlockDelegate();
-    public BlockDelegate blockCallback;
+    [Header("Block")]
+    public static bool isBlocking;
 
     void Start()
     {
@@ -26,8 +25,7 @@ public class PlayerInput : MonoBehaviour
         jumpTimerMax = .2f;
         jumpTimer = jumpTimerMax;
 
-        // PlayerBlock Function subscribes to blockCallback Delegate
-        blockCallback += PlayerBlock;
+        isBlocking = false;
     }
 
     void FixedUpdate()
@@ -104,9 +102,16 @@ public class PlayerInput : MonoBehaviour
 
     void PlayerBlock()
     {
-        if(Input.GetKeyDown(KeyCode.Mouse1))
+        if(Input.GetKey(KeyCode.Mouse1))
         {
-            Debug.Log("Player BLOCKS!");
+            isBlocking = true;
+
+            Debug.Log("isBlocking = " + isBlocking);
+        }
+
+        else
+        {
+            isBlocking = false;
         }
     }
     #endregion
