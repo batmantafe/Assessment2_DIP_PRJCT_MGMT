@@ -24,6 +24,7 @@ public class Enemy : MonoBehaviour
 	private Vector3 nextDestination;
 	private Vector3 currentDestination;
 	private bool playerSpotted;
+    private bool agentStopped;
 	private float currentWaitTime;
 	private Tasks currentTask;
 
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
 		agent = GetComponent<NavMeshAgent>();
 		sensesRange = GetComponent<SphereCollider>();
 		player = GameObject.FindGameObjectWithTag("Player");
+        agentStopped = false;
 		nextDestination = mapCentre;
 		agent.destination = mapCentre;
 		agent.stoppingDistance = attackRange * 0.8f;
@@ -49,6 +51,10 @@ public class Enemy : MonoBehaviour
 	void Update()
 	{
 		DecideTask();
+        if (nextDestination != currentDestination)
+        {
+            agent.ResetPath();
+        }
 		EnactTask();
 	}
 
@@ -81,21 +87,30 @@ public class Enemy : MonoBehaviour
 		switch (currentTask)
 		{
 			case Tasks.Attacking:
-				agent.Stop();
-				// Attack
-				break;
+                agent.Stop();
+                if (!agentStopped)
+                {
+                    agentStopped = true;
+                }
+                // Attack
+                break;
 			case Tasks.Tracking:
+                if (agentStopped)
+                {
+                    agent.Resume();
+                    agentStopped = false;
+                }
 				if (agent.speed != runSpeed)
 				{
 					agent.speed = runSpeed;
 				}
-				agent.destination = nextDestination;
+				agent.SetDestination(nextDestination);
 				break;
 			case Tasks.Waiting:
 				currentWaitTime += Time.deltaTime;
 				if (currentWaitTime >= waitTime)
 				{
-					agent.destination = mapCentre;
+					agent.SetDestination(mapCentre);
 					nextDestination = mapCentre;
 				}
 				break;
@@ -106,7 +121,7 @@ public class Enemy : MonoBehaviour
 				}
 				if (currentDestination != mapCentre)
 				{
-					agent.destination = mapCentre;
+					agent.SetDestination(mapCentre);
 					nextDestination = mapCentre;
 				}
 				break;
