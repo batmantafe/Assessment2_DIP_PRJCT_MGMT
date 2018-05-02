@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(SphereCollider))]
-public class Enemy : MonoBehaviour
+public class Enemy : Character
 {
 	// YOU WERE MEANT TO BE THE CHOSEN ONE!
 
@@ -24,25 +24,28 @@ public class Enemy : MonoBehaviour
 	private Vector3 nextDestination;
 	private Vector3 currentDestination;
 	private bool playerSpotted;
-    private bool agentStopped;
+    private bool agentSlowed;
 	private float currentWaitTime;
-	private Tasks currentTask;
+    private float attackRange;
+    private float attackTimer;
+    private float currentAttackTimer;
+    private Tasks currentTask;
 
+    [Header("Enemy")]
 	public Vector3 mapCentre;
 	public float sensesIncrease = 1f;
 	public float maxSensesRange = 30f;
 	public float fieldOfView = 110f;
 	public float waitTime = 3f;
-	public float walkSpeed = 2.5f;
-	public float runSpeed = 5f;
-	public float attackRange = 1f;
+	public float walkSpeed = 2f;
+	public float runSpeed = 4f;
 
 	void Awake()
 	{
 		agent = GetComponent<NavMeshAgent>();
 		sensesRange = GetComponent<SphereCollider>();
 		player = GameObject.FindGameObjectWithTag("Player");
-        agentStopped = false;
+        agentSlowed = false;
 		nextDestination = mapCentre;
 		agent.destination = mapCentre;
 		agent.stoppingDistance = attackRange * 0.8f;
@@ -66,8 +69,8 @@ public class Enemy : MonoBehaviour
 		}
 		else if (nextDestination != mapCentre || playerSpotted)
 		{
-			currentTask = Tasks.Tracking;
-			if (nextDestination == currentDestination && agent.stoppingDistance > agent.remainingDistance)
+			currentTask = Tasks.Tracking; 
+			if (nextDestination == currentDestination && agent.stoppingDistance > agent.remainingDistance && !playerSpotted)
 			{
 				currentTask = Tasks.Waiting;
 			}
@@ -87,23 +90,26 @@ public class Enemy : MonoBehaviour
 		switch (currentTask)
 		{
 			case Tasks.Attacking:
-                agent.Stop();
-                if (!agentStopped)
+                if (!agentSlowed)
                 {
-                    agentStopped = true;
+                    agent.speed = walkSpeed;
+                    agentSlowed = true;
                 }
-                // Attack
+                if (selectedCharacter == CharacterChoice.Diver)
+                {
+                    DiverGun();
+                }
+                else
+                {
+                    ShrimpPunch();
+                }
                 break;
 			case Tasks.Tracking:
-                if (agentStopped)
+                if (agentSlowed)
                 {
-                    agent.Resume();
-                    agentStopped = false;
+                    agent.speed = runSpeed;
+                    agentSlowed = false;
                 }
-				if (agent.speed != runSpeed)
-				{
-					agent.speed = runSpeed;
-				}
 				agent.SetDestination(nextDestination);
 				break;
 			case Tasks.Waiting:
@@ -115,11 +121,12 @@ public class Enemy : MonoBehaviour
 				}
 				break;
 			case Tasks.Walking:
-				if (agent.speed != walkSpeed)
-				{
-					agent.speed = walkSpeed;
-				}
-				if (currentDestination != mapCentre)
+                if (!agentSlowed)
+                {
+                    agent.speed = walkSpeed;
+                    agentSlowed = true;
+                }
+                if (currentDestination != mapCentre)
 				{
 					agent.SetDestination(mapCentre);
 					nextDestination = mapCentre;
