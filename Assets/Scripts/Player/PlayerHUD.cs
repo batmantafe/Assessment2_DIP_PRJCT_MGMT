@@ -14,6 +14,11 @@ public class PlayerHUD : MonoBehaviour
     public float playerBlockCurrent;
     public GUIStyle blockBarStyle;
 
+    [Header("Timer HUD")]
+    public float playerTimerMax;
+    public float playerTime;
+    public GUIStyle timeBarStyle; // Player > HUD > Time Bar Style > Normal > Background
+
     void Start()
     {
         playerHealthMax = 100;
@@ -21,6 +26,9 @@ public class PlayerHUD : MonoBehaviour
 
         playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
+
+        playerTimerMax = 10f;
+        playerTime = playerTimerMax;
     }
 
     void Update()
@@ -28,6 +36,8 @@ public class PlayerHUD : MonoBehaviour
         TestBars();
 
         BlockCooldown();
+
+        Countdown();
     }
 
     void OnGUI()
@@ -40,6 +50,9 @@ public class PlayerHUD : MonoBehaviour
 
         // Block Bar
         GUI.Box(new Rect(6f * scrW, 8.15f * scrH, playerBlockCurrent * (4 * scrW) / playerBlockMax, 0.25f * scrH), "", blockBarStyle);
+
+        // Timer Bar
+        GUI.Box(new Rect(6f * scrW, 7.9f * scrH, playerTime * (4 * scrW) / playerTimerMax, 0.25f * scrH), "", timeBarStyle);
     }
 
     #region Debugging Shortcuts
@@ -81,5 +94,19 @@ public class PlayerHUD : MonoBehaviour
         {
             playerBlockCurrent = playerBlockCurrent + (0.25f * Time.deltaTime);
         }
+    }
+
+    void Countdown()
+    {
+        playerTime = playerTime - (1 * Time.deltaTime);
+
+        if (playerTime <= 0)
+        {
+            playerTime = 0;
+
+            GameManager.gameLost = true;
+        }
+
+        Debug.Log("timeCount = " + playerTime);
     }
 }
