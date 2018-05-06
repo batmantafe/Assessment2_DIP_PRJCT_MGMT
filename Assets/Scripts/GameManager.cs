@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviour
 {
     private int playerChoseCharacter;
@@ -20,6 +22,8 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         WinLoseCheck();
+
+        DebugTestKeys(); // Remove this later
     }
 
     void CharacterChoice()
@@ -30,9 +34,15 @@ public class GameManager : MonoBehaviour
         {
             case 1:
                 Debug.Log("Player is DIVER!");
+
+                // Activate Player as Diver here!
+
                 break;
             case 2:
                 Debug.Log("Player is SHRIMP");
+
+                // Activate Player as Shrimp here!
+
                 break;
         }
     }
@@ -50,11 +60,31 @@ public class GameManager : MonoBehaviour
         if (gameLost == true)
         {
             Debug.Log("gameLost == true");
+
+            SceneManager.LoadScene("Lose");
         }
 
         if (gameWon == true)
         {
             Debug.Log("gameWon == true");
+
+            SceneManager.LoadScene("Win");
+        }
+    }
+
+    // For Debugging and Testing
+    void DebugTestKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.F11))
+        {
+            gameWon = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.F12))
+        {
+            SceneManager.LoadScene("Debug Key: Lose!");
+
+            gameLost = true;
         }
     }
 }
