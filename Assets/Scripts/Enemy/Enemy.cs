@@ -51,9 +51,10 @@ public class Enemy : Character
 		agent.stoppingDistance = attackRange * 0.8f;
 	}
 
-	void Update()
+	public override void Update()
 	{
-		DecideTask();
+        base.Update();
+        DecideTask();
         if (nextDestination != currentDestination)
         {
             agent.ResetPath();
@@ -61,7 +62,7 @@ public class Enemy : Character
 		EnactTask();
 	}
 
-	void DecideTask()
+    void DecideTask()
 	{
 		if (playerSpotted && agent.remainingDistance <= attackRange && currentDestination != mapCentre)
 		{
@@ -95,14 +96,7 @@ public class Enemy : Character
                     agent.speed = walkSpeed;
                     agentSlowed = true;
                 }
-                if (selectedCharacter == CharacterChoice.Diver)
-                {
-                    DiverGun();
-                }
-                else
-                {
-                    ShrimpPunch();
-                }
+                Attack();
                 break;
 			case Tasks.Tracking:
                 if (agentSlowed)
