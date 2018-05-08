@@ -8,6 +8,7 @@ public class PlayerHUD : MonoBehaviour
     public float playerHealthMax;
     public float playerHealth;
     public GUIStyle healthBarStyle; // Player > HUD > Health Bar Style > Normal > Background
+    public float hazardDamage;
 
     [Header("Block HUD")]
     public float playerBlockMax;
@@ -23,6 +24,8 @@ public class PlayerHUD : MonoBehaviour
     {
         playerHealthMax = 100;
         playerHealth = playerHealthMax;
+
+        hazardDamage = 25;
 
         playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
@@ -108,5 +111,13 @@ public class PlayerHUD : MonoBehaviour
         }
 
         Debug.Log("timeCount = " + playerTime);
+    }
+
+    void OnCollisionStay(Collision other)
+    {
+        if (other.gameObject.CompareTag("Hazard"))
+        {
+            playerHealth = playerHealth - (hazardDamage * Time.deltaTime);
+        }
     }
 }
