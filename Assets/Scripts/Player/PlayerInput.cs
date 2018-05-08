@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class PlayerInput : Character
 {
     [Header("Movement")]
     public Rigidbody playerRigi;
@@ -36,8 +36,9 @@ public class PlayerInput : MonoBehaviour
         PlayerJump();
     }
 
-    void Update()
+    public override void Update()
     {
+        base.Update();
         PlayerAttack();
         PlayerBlock();
     }
@@ -99,6 +100,7 @@ public class PlayerInput : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Mouse0))
         {
             Debug.Log("Player ATTACKS!");
+            Attack();
         }
     }
 
