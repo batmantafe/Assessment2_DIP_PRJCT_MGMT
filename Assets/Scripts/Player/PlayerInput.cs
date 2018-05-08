@@ -7,6 +7,7 @@ public class PlayerInput : MonoBehaviour
     [Header("Movement")]
     public Rigidbody playerRigi;
     public float moveSpeed;
+    public float turnSpeed;
 
     [Header("Jump")]
     public float jumpThrust;
@@ -20,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     {
         playerRigi = GetComponent<Rigidbody>();
         moveSpeed = 5f;
+        turnSpeed = 100f;
 
         jumpThrust = 50f;
         jumpTimerMax = .2f;
@@ -55,16 +57,16 @@ public class PlayerInput : MonoBehaviour
             playerRigi.MovePosition(transform.position + -transform.forward * (Time.deltaTime * moveSpeed));
         }
 
-        // Move Left
+        // Turn Left
         if (Input.GetKey(KeyCode.A))
         {
-            playerRigi.MovePosition(transform.position + -transform.right * (Time.deltaTime * moveSpeed));
+            transform.Rotate(-Vector3.up * (Time.deltaTime * turnSpeed));
         }
 
-        // Move Right
+        // Turn Right
         if (Input.GetKey(KeyCode.D))
         {
-            playerRigi.MovePosition(transform.position + transform.right * (Time.deltaTime * moveSpeed));
+            transform.Rotate(Vector3.up * (Time.deltaTime * turnSpeed));
         }
     }
     #endregion
