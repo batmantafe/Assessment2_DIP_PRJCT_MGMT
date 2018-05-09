@@ -119,5 +119,10 @@ public class PlayerHUD : MonoBehaviour
         {
             playerHealth = playerHealth - (hazardDamage * Time.deltaTime);
         }
+
+        if (other.gameObject.CompareTag("Win"))
+        {
+            GameManager.gameWon = true;
+        }
     }
 }
