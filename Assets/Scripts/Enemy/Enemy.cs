@@ -48,7 +48,14 @@ public class Enemy : Character
         agentSlowed = false;
 		nextDestination = mapCentre;
 		agent.destination = mapCentre;
-		agent.stoppingDistance = attackRange * 0.8f;
+        if (selectedCharacter == CharacterChoice.Diver)
+        {
+            attackRange = DRange;
+        }
+        else
+        {
+            attackRange = SRange;
+        }
 	}
 
 	public override void Update()
@@ -71,7 +78,7 @@ public class Enemy : Character
 		else if (nextDestination != mapCentre || playerSpotted)
 		{
 			currentTask = Tasks.Tracking; 
-			if (nextDestination == currentDestination && agent.stoppingDistance > agent.remainingDistance && !playerSpotted)
+			if (nextDestination == currentDestination && !playerSpotted)
 			{
 				currentTask = Tasks.Waiting;
 			}
@@ -97,6 +104,7 @@ public class Enemy : Character
                     agentSlowed = true;
                 }
                 Attack();
+                agent.SetDestination(nextDestination);
                 break;
 			case Tasks.Tracking:
                 if (agentSlowed)

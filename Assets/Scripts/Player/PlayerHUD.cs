@@ -22,15 +22,15 @@ public class PlayerHUD : MonoBehaviour
 
     void Start()
     {
-        playerHealthMax = 100;
+        //playerHealthMax = 100;
         playerHealth = playerHealthMax;
 
-        hazardDamage = 25;
+        //hazardDamage = 25;
 
-        playerBlockMax = 1;
+        //playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
 
-        playerTimerMax = 10f;
+        //playerTimerMax = 10f;
         playerTime = playerTimerMax;
     }
 
@@ -110,7 +110,7 @@ public class PlayerHUD : MonoBehaviour
             GameManager.gameLost = true;
         }
 
-        Debug.Log("timeCount = " + playerTime);
+        //Debug.Log("timeCount = " + playerTime);
     }
 
     void OnCollisionStay(Collision other)

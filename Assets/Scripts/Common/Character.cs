@@ -14,10 +14,11 @@ public class Character : MonoBehaviour
     [Header("DiverGun")]
     public int DDamage = 2;
     public int DTime = 3;
-    public int DAttackRange = 7;
+    public int DRange = 7;
     public float DSpeed = 5;
     public float DAttackDelay = 1;
     public GameObject DProjectile;
+    public Transform DShotSpot;
     
     [Header("ShrimpPunch")]
     public int SDamage = 4;
@@ -39,12 +40,14 @@ public class Character : MonoBehaviour
                 if (currentAttackDelay >= DAttackDelay)
                 {
                     DiverGun();
+                    currentAttackDelay = 0;
                 }
                 break;
             case CharacterChoice.Shrimp:
                 if (currentAttackDelay >= SAttackDelay)
                 {
                     ShrimpPunch();
+                    currentAttackDelay = 0;
                 }
                 break;
             default:
@@ -54,9 +57,8 @@ public class Character : MonoBehaviour
 
     void DiverGun()
     {
-        Debug.Log(transform);
         Debug.Log("I'm Shooting The Guy!");
-        GameObject clone = Instantiate(DProjectile, transform);
+        GameObject clone = Instantiate(DProjectile, DShotSpot.position, Quaternion.identity);
         Projectile cloneProjectile = clone.GetComponent<Projectile>();
         cloneProjectile.direction = transform.forward;
         cloneProjectile.force = DSpeed;

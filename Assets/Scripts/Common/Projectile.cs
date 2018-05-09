@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    void OnCollisionEnter()
+    void OnCollisionEnter(Collision col)
     {
 
     }
