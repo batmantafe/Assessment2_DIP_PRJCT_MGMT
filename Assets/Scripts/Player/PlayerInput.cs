@@ -17,6 +17,11 @@ public class PlayerInput : Character
     [Header("Block")]
     public static bool isBlocking;
 
+    [Header("Lobster: Animations")]
+    public GameObject lobsterMaya;
+    public Animator lobsterAnim;
+    public bool lobsterMoving;
+
     void Start()
     {
         playerRigi = GetComponent<Rigidbody>();
@@ -28,6 +33,12 @@ public class PlayerInput : Character
         jumpTimer = jumpTimerMax;
 
         isBlocking = false;
+
+        lobsterMoving = false;
+
+        lobsterAnim = lobsterMaya.GetComponent<Animator>();
+
+        lobsterAnim.SetTrigger("LobsterIdle");
     }
 
     void FixedUpdate()
@@ -45,29 +56,42 @@ public class PlayerInput : Character
 
     #region Movement
     void PlayerMovement()
-    {
+    {       
         // Move Up
         if (Input.GetKey(KeyCode.W))
         {
             playerRigi.MovePosition(transform.position + transform.forward * (Time.deltaTime * moveSpeed));
-        }
 
+            lobsterMoving = true;
+        }
+        
         // Move Down
         if (Input.GetKey(KeyCode.S))
         {
             playerRigi.MovePosition(transform.position + -transform.forward * (Time.deltaTime * moveSpeed));
+
+            lobsterMoving = true;
         }
 
         // Turn Left
         if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(-Vector3.up * (Time.deltaTime * turnSpeed));
-        }
 
+            lobsterMoving = true;
+        }
+        
         // Turn Right
         if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(Vector3.up * (Time.deltaTime * turnSpeed));
+
+            lobsterMoving = true;
+        }
+
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
+        {
+            lobsterMoving = false;
         }
     }
     #endregion
@@ -135,6 +159,21 @@ public class PlayerInput : Character
         if (other.gameObject.CompareTag("Ground"))
         {
 
+        }
+    }
+    #endregion
+
+    #region Animations
+    void Animations()
+    {
+        if (lobsterMoving == true)
+        {
+            lobsterAnim.SetTrigger("LobsterWalking");
+        }
+
+        if (lobsterMoving == false)
+        {
+            lobsterAnim.SetTrigger("LobsterIdle");
         }
     }
     #endregion
