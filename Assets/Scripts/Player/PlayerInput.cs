@@ -145,7 +145,7 @@ public class PlayerInput : Character
         {
             isBlocking = true;
 
-            Debug.Log("isBlocking = " + isBlocking);
+            //Debug.Log("isBlocking = " + isBlocking);
         }
 
         else

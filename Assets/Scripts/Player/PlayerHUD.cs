@@ -14,6 +14,8 @@ public class PlayerHUD : MonoBehaviour
     public float playerBlockMax;
     public float playerBlockCurrent;
     public GUIStyle blockBarStyle;
+    public float playerBlockBurn;
+    public float playerBlockRecharge;
 
     [Header("Timer HUD")]
     public float playerTimerMax;
@@ -29,6 +31,8 @@ public class PlayerHUD : MonoBehaviour
 
         //playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
+        playerBlockBurn = 100f;
+        playerBlockRecharge = 25f;
 
         //playerTimerMax = 10f;
         playerTime = playerTimerMax;
@@ -36,7 +40,7 @@ public class PlayerHUD : MonoBehaviour
 
     void Update()
     {
-        TestBars();
+        //TestBars();
 
         BlockCooldown();
 
@@ -89,13 +93,13 @@ public class PlayerHUD : MonoBehaviour
         if (PlayerInput.isBlocking == true &&
             playerBlockCurrent > 0f)
         {
-            playerBlockCurrent = playerBlockCurrent - (1f * Time.deltaTime);
+            playerBlockCurrent = playerBlockCurrent - (playerBlockBurn * Time.deltaTime);
         }
 
         if (PlayerInput.isBlocking == false &&
             playerBlockCurrent != playerBlockMax)
         {
-            playerBlockCurrent = playerBlockCurrent + (0.25f * Time.deltaTime);
+            playerBlockCurrent = playerBlockCurrent + (playerBlockRecharge * Time.deltaTime);
         }
     }
 
