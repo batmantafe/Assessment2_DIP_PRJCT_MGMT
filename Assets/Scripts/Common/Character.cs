@@ -61,7 +61,7 @@ public class Character : MonoBehaviour
         GameObject clone = Instantiate(DProjectile, DShotSpot.position, Quaternion.identity);
         Projectile cloneProjectile = clone.GetComponent<Projectile>();
         cloneProjectile.direction = transform.forward;
-        cloneProjectile.force = DSpeed;
+        cloneProjectile.force = DSpeed * 3;
         cloneProjectile.damage = DDamage;
         cloneProjectile.lifeTime = DTime;
     }

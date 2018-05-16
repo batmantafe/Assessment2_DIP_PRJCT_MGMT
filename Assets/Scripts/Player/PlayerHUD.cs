@@ -129,6 +129,27 @@ public class PlayerHUD : MonoBehaviour
         }
     }
 
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            //playerHealth = playerHealth - bulletDamage;
+
+            if (PlayerInput.isBlocking == false)
+            {
+                playerHealth = playerHealth - bulletDamage;
+            }
+
+            if (PlayerInput.isBlocking == true)
+            {
+                if (playerBlockCurrent <= 0)
+                {
+                    playerHealth = playerHealth - bulletDamage;
+                }
+            }
+        }
+    }
+
     void OnCollisionStay(Collision other)
     {
         if (other.gameObject.CompareTag("Hazard"))
@@ -148,24 +169,6 @@ public class PlayerHUD : MonoBehaviour
             else
             {
                 GameManager.gameLost = true;
-            }
-        }
-
-        if (other.gameObject.CompareTag("Bullet"))
-        {
-            //playerHealth = playerHealth - bulletDamage;
-
-            if (PlayerInput.isBlocking == false)
-            {
-                playerHealth = playerHealth - bulletDamage;
-            }
-
-            if (PlayerInput.isBlocking == true)
-            {
-                if (playerBlockCurrent <= 0)
-                {
-                    playerHealth = playerHealth - bulletDamage;
-                }
             }
         }
 
