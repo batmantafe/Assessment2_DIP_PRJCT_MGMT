@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
         switch (playerChoseCharacter)
         {
             case 1:
-                Debug.Log("Player is DIVER!");
+                //Debug.Log("Player is DIVER!");
 
                 // Activate Player as Diver here!
 
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
                 break;
             case 2:
-                Debug.Log("Player is SHRIMP");
+                //Debug.Log("Player is SHRIMP");
 
                 // Activate Player as Shrimp here!
 

@@ -25,7 +25,7 @@ public class PlayerHUD : MonoBehaviour
         //playerHealthMax = 100;
         playerHealth = playerHealthMax;
 
-        //hazardDamage = 25;
+        hazardDamage = 25;
 
         //playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
@@ -111,12 +111,21 @@ public class PlayerHUD : MonoBehaviour
         }
 
         //Debug.Log("timeCount = " + playerTime);
+
+        if (playerHealth <= 0)
+        {
+            playerHealth = 0;
+
+            GameManager.gameLost = true;
+        }
     }
 
     void OnCollisionStay(Collision other)
     {
         if (other.gameObject.CompareTag("Hazard"))
         {
+            //Debug.Log(other.gameObject.tag);
+
             playerHealth = playerHealth - (hazardDamage * Time.deltaTime);
         }
 
