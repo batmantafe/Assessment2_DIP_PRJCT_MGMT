@@ -9,6 +9,7 @@ public class PlayerHUD : MonoBehaviour
     public float playerHealth;
     public GUIStyle healthBarStyle; // Player > HUD > Health Bar Style > Normal > Background
     public float hazardDamage;
+    public float bulletDamage;
 
     [Header("Block HUD")]
     public float playerBlockMax;
@@ -28,6 +29,8 @@ public class PlayerHUD : MonoBehaviour
         playerHealth = playerHealthMax;
 
         hazardDamage = 25;
+
+        bulletDamage = 50;
 
         //playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
@@ -126,7 +129,7 @@ public class PlayerHUD : MonoBehaviour
 
     void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.CompareTag("Hazard"))
+        if (other.gameObject.CompareTag("Hazard") || other.gameObject.CompareTag("Enemy"))
         {
             //Debug.Log(other.gameObject.tag);
 
@@ -144,6 +147,11 @@ public class PlayerHUD : MonoBehaviour
             {
                 GameManager.gameLost = true;
             }
+        }
+
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            playerHealth = playerHealth - bulletDamage;
         }
     }
 }
