@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     {
         WinLoseCheck();
 
-        DebugTestKeys(); // Remove this later
+        //DebugTestKeys(); // Remove this later
     }
 
     void CharacterChoice()
@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
     {
         gameLost = false;
         gameWon = false;
+
+        Cursor.visible = false;
     }
 
     
@@ -95,12 +97,16 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("gameLost == true");
 
+            Cursor.visible = true;
+
             SceneManager.LoadScene("Lose");
         }
 
         if (gameWon == true)
         {
             Debug.Log("gameWon == true");
+
+            Cursor.visible = true;
 
             SceneManager.LoadScene("Win");
         }

@@ -77,12 +77,16 @@ public class Menu : MonoBehaviour
                     Time.timeScale = 0f;
 
                     inGameOptionsMenu.SetActive(true);
+
+                    Cursor.visible = true;
                 }
                 else
                 {
                     Time.timeScale = 1f;
 
                     inGameOptionsMenu.SetActive(false);
+
+                    Cursor.visible = false;
                 }
             }
         }
