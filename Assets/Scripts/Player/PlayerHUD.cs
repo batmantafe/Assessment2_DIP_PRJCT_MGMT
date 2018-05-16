@@ -17,6 +17,7 @@ public class PlayerHUD : MonoBehaviour
     public GUIStyle blockBarStyle;
     public float playerBlockBurn;
     public float playerBlockRecharge;
+    public float enemyDamage;
 
     [Header("Timer HUD")]
     public float playerTimerMax;
@@ -31,6 +32,7 @@ public class PlayerHUD : MonoBehaviour
         hazardDamage = 25;
 
         bulletDamage = 50;
+        enemyDamage = 25;
 
         //playerBlockMax = 1;
         playerBlockCurrent = playerBlockMax;
@@ -129,7 +131,7 @@ public class PlayerHUD : MonoBehaviour
 
     void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.CompareTag("Hazard") || other.gameObject.CompareTag("Enemy"))
+        if (other.gameObject.CompareTag("Hazard"))
         {
             //Debug.Log(other.gameObject.tag);
 
@@ -151,7 +153,36 @@ public class PlayerHUD : MonoBehaviour
 
         if (other.gameObject.CompareTag("Bullet"))
         {
-            playerHealth = playerHealth - bulletDamage;
+            //playerHealth = playerHealth - bulletDamage;
+
+            if (PlayerInput.isBlocking == false)
+            {
+                playerHealth = playerHealth - bulletDamage;
+            }
+
+            if (PlayerInput.isBlocking == true)
+            {
+                if (playerBlockCurrent <= 0)
+                {
+                    playerHealth = playerHealth - bulletDamage;
+                }
+            }
+        }
+
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            if (PlayerInput.isBlocking == false)
+            {
+                playerHealth = playerHealth - (enemyDamage * Time.deltaTime);
+            }
+
+            if (PlayerInput.isBlocking == true)
+            {
+                if (playerBlockCurrent <= 0)
+                {
+                    playerHealth = playerHealth - (enemyDamage * Time.deltaTime);
+                }
+            }
         }
     }
 }
