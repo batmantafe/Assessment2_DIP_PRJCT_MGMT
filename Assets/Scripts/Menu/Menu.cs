@@ -104,6 +104,8 @@ public class Menu : MonoBehaviour
 
     public void MainMenuButton()
     {
+        Time.timeScale = 1f;
+
         SceneManager.LoadScene("Main Menu");
     }
     #endregion
