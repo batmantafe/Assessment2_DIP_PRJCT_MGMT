@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public Camera lobsterCam, diverCam;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         StartGameConditions();
 
@@ -41,6 +41,9 @@ public class GameManager : MonoBehaviour
 
                 // Activate Player as Diver here!
 
+                diverGO.tag = "Player";
+                lobsterGO.tag = "Enemy";
+
                 diverGO.GetComponent<PlayerHUD>().enabled = true;
                 diverGO.GetComponent<PlayerInput>().enabled = true;
                 diverGO.GetComponent<SphereCollider>().enabled = false;
@@ -61,6 +64,9 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("Player is SHRIMP");
 
                 // Activate Player as Shrimp here!
+
+                lobsterGO.tag = "Player";
+                diverGO.tag = "Enemy";
 
                 lobsterGO.GetComponent<PlayerHUD>().enabled = true;
                 lobsterGO.GetComponent<PlayerInput>().enabled = true;

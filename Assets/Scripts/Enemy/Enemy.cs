@@ -20,7 +20,7 @@ public class Enemy : Character
 
 	private NavMeshAgent agent;
 	private SphereCollider sensesRange;
-	private GameObject player;
+	public GameObject player;
 	private Vector3 nextDestination;
 	private Vector3 currentDestination;
 	private bool playerSpotted;
@@ -44,7 +44,7 @@ public class Enemy : Character
 	{
 		agent = GetComponent<NavMeshAgent>();
 		sensesRange = GetComponent<SphereCollider>();
-		player = GameObject.FindGameObjectWithTag("Player");
+		//player = GameObject.FindGameObjectWithTag("Player"); // Script not getting correct player, will set this publically in Inspector
         agentSlowed = false;
 		nextDestination = mapCentre;
 		agent.destination = mapCentre;
