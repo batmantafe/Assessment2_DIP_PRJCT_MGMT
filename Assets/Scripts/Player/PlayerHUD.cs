@@ -122,7 +122,15 @@ public class PlayerHUD : MonoBehaviour
 
         if (other.gameObject.CompareTag("Win"))
         {
-            GameManager.gameWon = true;
+            if (this.enabled)
+            {
+                GameManager.gameWon = true;
+            }
+
+            else
+            {
+                GameManager.gameLost = true;
+            }
         }
     }
 }
