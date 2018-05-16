@@ -13,6 +13,7 @@ public class PlayerInput : Character
     public float jumpThrust;
     public float jumpTimer;
     public float jumpTimerMax;
+    public float jumpWait;
 
     [Header("Block")]
     public static bool isBlocking;
@@ -31,6 +32,7 @@ public class PlayerInput : Character
         jumpThrust = 50f;
         jumpTimerMax = .2f;
         jumpTimer = jumpTimerMax;
+        jumpWait = 4f;
 
         isBlocking = false;
 
@@ -115,6 +117,15 @@ public class PlayerInput : Character
         {
             jumpTimer = 0f;
         }
+
+        StartCoroutine(CanJump());
+    }
+
+    IEnumerator CanJump()
+    {
+        yield return new WaitForSeconds(jumpWait);
+
+        jumpTimer = jumpTimerMax;
     }
     #endregion
 
@@ -147,19 +158,21 @@ public class PlayerInput : Character
     #region Collisions
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        /*if (other.gameObject.CompareTag("Ground"))
         {
             // Reset Clock
             jumpTimer = jumpTimerMax;
-        }
+
+            Debug.Log("Ground Enter");
+        }*/
     }
 
-    void OnCollisionExit(Collision other)
+    void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        /*if (other.gameObject.CompareTag("Ground"))
         {
-
-        }
+            Debug.Log("Ground Exit");
+        }*/
     }
     #endregion
 
